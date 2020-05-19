@@ -1,3 +1,7 @@
+
+#ifndef Bluetooth_h
+#define Bluetooth_h
+
 #include "SoftwareSerial.h"
 #include "Arduino.h"
 //Pins used by ardunio to recieve and transmit data to bluetooth module
@@ -13,14 +17,15 @@
 //there is a connection.
 class Bluetooth : public SoftwareSerial{
     
+public:
+//when bluetooth class is initialized it also initialize software serial with the serial pins to be communicated on
 
-    Bluetooth::Bluetooth ():SoftwareSerial(RX,TX){
-
-    };
+ Bluetooth():SoftwareSerial(RX,TX){};
     
-     bool isConnected(){
-        return digitalRead(STATEPIN);
-    }
+    //check and see if bluetooth module is connected
+    bool isConnected(){};
 
 
 };
+
+#endif
