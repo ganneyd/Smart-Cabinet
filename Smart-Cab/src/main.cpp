@@ -1,15 +1,26 @@
 #include "Arduino.h"
+#include "Bluetooth.h"
 
-#define onboard 8
 
+Bluetooth BT;
 void setup(){
-pinMode(onboard, OUTPUT);
+    //Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
+    BT.begin(BAUDRATE);
+
+Serial.begin(BAUDRATE);
+
+
+
+Serial.println("hey");
 
 }
 
 void loop(){
-    digitalWrite(onboard,HIGH);
-    delay(100);
-    digitalWrite(onboard,LOW);
-    delay(100);
+    //Simple test to see if inheritance worked, and see if anything is in the bluetooth's buffer
+    while(BT.available() >0){
+        Serial.println(BT.read());
+    }
+    while(Serial.available() > 0){
+        BT.println(Serial.read());
+    }
 }
