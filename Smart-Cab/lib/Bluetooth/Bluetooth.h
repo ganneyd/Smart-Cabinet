@@ -24,7 +24,9 @@ public:
  Bluetooth()
  //default Sofware serial or rather constant since these pins will alwayse be used to communicate
  //to the bluetooth module
- :SoftwareSerial(RX,TX){};
+ :SoftwareSerial(RX,TX){
+    pinMode(STATEPIN,INPUT);
+ };
     
     //check and see if bluetooth module is connected
     bool isConnected();

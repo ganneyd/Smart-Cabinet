@@ -3,10 +3,6 @@
 #include "../lib/Sensor/Sensors.h"
 
 bool prevPrint = false;
-Sensor sensor_1=Sensor(0);
-Sensor sensor_2 = Sensor(1);
-Sensor sensor_3 = Sensor(2);
-Sensor sensor_4 = Sensor(3);
 
 
 Bluetooth BT;
@@ -34,43 +30,43 @@ Serial.println("hey");
 
 void loop(){
 
-    //Simple test to see if sensors are able to communicate properly via multiplexer
-    //sensor 1 
-        readSensor(sensor_1);
-        delay(2000);
-    //sensor 2
-        readSensor(sensor_2);
-                delay(2000);
+    // //Simple test to see if sensors are able to communicate properly via multiplexer
+    // //sensor 1 
+    //     readSensor(sensor_1);
+    //     delay(2000);
+    // //sensor 2
+    //     readSensor(sensor_2);
+    //             delay(2000);
 
-    //sensor 3
-        readSensor(sensor_3);
-                delay(2000);
+    // //sensor 3
+    //     readSensor(sensor_3);
+    //             delay(2000);
 
-    //sensor 4
-        readSensor(sensor_4);
-                delay(2000);
+    // //sensor 4
+    //     readSensor(sensor_4);
+    //             delay(2000);
 
 
-    //Simple test to see if inheritance worked, and see if anything is in the bluetooth's buffer
-    while(BT.available() >0){
-        char c;
-        String line;
-        while (BT.available() >0){
-            c = BT.read();
-            line+=c;
-        }
+    // //Simple test to see if inheritance worked, and see if anything is in the bluetooth's buffer
+    // while(BT.available() >0){
+    //     char c;
+    //     String line;
+    //     while (BT.available() >0){
+    //         c = BT.read();
+    //         line+=c;
+    //     }
         
-        Serial.println(line);
-    }
-    while(Serial.available() > 0){
-        BT.println(Serial.read());
-    }
+    //     Serial.println(line);
+    // }
+    // while(Serial.available() > 0){
+    //     BT.println(Serial.read());
+    // }
 
-    if(BT.isConnected() && !prevPrint){
-        Serial.println("Bluetooth Connected");
-        prevPrint=true;
-    }else if (!BT.isConnected() && prevPrint){
-        Serial.println("Lost connection");
-        prevPrint=false;
-    }
+    // if(BT.isConnected() && !prevPrint){
+    //     Serial.println("Bluetooth Connected");
+    //     prevPrint=true;
+    // }else if (!BT.isConnected() && prevPrint){
+    //     Serial.println("Lost connection");
+    //     prevPrint=false;
+    // }
 }
