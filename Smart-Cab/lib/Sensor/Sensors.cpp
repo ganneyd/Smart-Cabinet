@@ -3,13 +3,12 @@
 
 Sensor::Sensor(uint8_t bus){
     this->bus = bus;
-    Multiplexer(this->bus);
     sensorInit();
 
 }
-
 void Sensor::sensorInit(){
     //Initializing the sensor
+     Multiplexer(this->bus);//move port on the multiplexer to port of this class
     this->sensor.reset();//begin with a reset
     this->sensor.begin();
     this->sensor.setMeasurementMode(TEMP_AND_HUMID);//we want to read  both temperature and humidity so we set that
@@ -35,19 +34,26 @@ void Sensor::setHumidityRange(float lowHumidity, float highHumidity){
 //Getters - values being returned 
 //read temperature from sensor and return it via Sensor's class function
  float Sensor::readTemp(){
-
+      Multiplexer(this->bus);//move port on the multiplexer to port of this class
      return this->sensor.readTemp();
  }
 //read humidity from sensor and return it via Sensor's class function
  float Sensor::readHumidity(){
+      Multiplexer(this->bus);//move port on the multiplexer to port of this class
      float humidity = this->sensor.readHumidity();
      if(lowHumidity<humidity<highHumidity){
          //flag
      }
      return humidity;
  }
+
+ //return the bus port for this sensor
+ uint8_t Sensor::getBus(){
+     return this->bus;
+ }
  
  void Sensor::refreshSensor(uint8_t duration){
+      Multiplexer(this->bus);//move port on the multiplexer to port of this class
      this->sensor.enableHeater();
      delay(duration);
      this->sensor.disableHeater();
