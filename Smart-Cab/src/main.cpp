@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "Bluetooth.h"
+#include <../lib/Bluetooth/Bluetooth.h>
 
 bool prevPrint = false;
 
