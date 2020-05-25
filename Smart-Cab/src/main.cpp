@@ -1,5 +1,11 @@
 #include "Arduino.h"
 #include <../lib/Bluetooth/Bluetooth.h>
+#include "../Config/Config.h"
+#include "../Sensor/Sensors.h"
+
+
+HDC2080 sensor = HDC2080(0x40);
+Sensor sensor_0 = Sensor(sensor,2);
 
 
 
