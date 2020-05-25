@@ -17,7 +17,7 @@ void setup(){
     //Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
     //BT.begin(BAUDRATE);
 
-Serial.begin(9600);
+Serial.begin(BAUDRATE);
 
 Serial.println("hey");
 

@@ -6,7 +6,7 @@
 #include "../Config/Config.h"
 
 class Sensor{
-    
+
     private:
 
     //Save a pointer to the HDC2080 (Humidity sensor) class as all of the sensor share the same address and 
@@ -18,13 +18,24 @@ class Sensor{
 
     //Enable to change the port we are currently communicating to on the multiplexer so we can distinguish the 
     //sensors currently attached to it 
-    void moveToPort();
+    void moveToPort(void);
     
     public:
     //Constructor pass sensor by reference instead of by value to reduce overhead
     Sensor(HDC2080 &sensor,uint8_t bus);
-    ~Sensor();
-    void begin();
+    ~Sensor(void);
+
+    //initializes the sensor with default configurations
+    void begin(void);
+
+    //gets the humidity reading from the sensor and returns the value 
+    float getHumidity(void);
+    
+    //gets the temperature reading from the sensor and returns the value
+    float getTemperature(void);
+
+    //enables the heating element of the sensor to get rid of humidity residue so that a more accurate reading is performed
+    void performHeatCycle(int duration);
 
     
 
