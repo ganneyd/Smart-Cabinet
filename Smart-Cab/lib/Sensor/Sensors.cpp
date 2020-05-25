@@ -1,20 +1,24 @@
 #include "Sensors.h"
 
 
-Sensor::Sensor(uint8_t bus){
-    this->bus = bus;
-    sensorInit();
 
+Sensor::Sensor(){;
+    //do nothing
 }
-void Sensor::sensorInit(){
+void Sensor::begin(int bus){
+   this->bus = bus;
+
+
+   
     //Initializing the sensor
      Multiplexer(this->bus);//move port on the multiplexer to port of this class
+     this->sensor.begin();
     this->sensor.reset();//begin with a reset
-    this->sensor.begin();
+    
     this->sensor.setMeasurementMode(TEMP_AND_HUMID);//we want to read  both temperature and humidity so we set that
     this->sensor.setRate(MANUAL);//we'll set an interupt to read perodically but if the user wants to read at anytime MANUAL would be our best option
     this->sensor.setTempRes(NINE_BIT);//we dpn't need a lot of resolution so nine bits will do
-    this->sensor.setHumidRes(NINE_BIT);//"""""
+    this->sensor.setHumidRes(NINE_BIT);//"""
 }
 //Setters- set values belonging to the class
 
@@ -41,9 +45,9 @@ void Sensor::setHumidityRange(float lowHumidity, float highHumidity){
  float Sensor::readHumidity(){
       Multiplexer(this->bus);//move port on the multiplexer to port of this class
      float humidity = this->sensor.readHumidity();
-     if(lowHumidity<humidity<highHumidity){
-         //flag
-     }
+    //  if(lowHumidity<humidity<highHumidity){
+    //      flag
+    //  }
      return humidity;
  }
 
@@ -58,3 +62,4 @@ void Sensor::setHumidityRange(float lowHumidity, float highHumidity){
      delay(duration);
      this->sensor.disableHeater();
  }
+
