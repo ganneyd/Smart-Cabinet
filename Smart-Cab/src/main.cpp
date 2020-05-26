@@ -1,55 +1,40 @@
 #include "Arduino.h"
 #include <../lib/Bluetooth/Bluetooth.h>
 #include "../Config/Config.h"
-#include "../Sensor/Sensors.h"
+#include "../Sensor/Sensor.h"
+#include <Wire.h>
 
+#define INTERVAL 5000
 
-HDC2080 sensor = HDC2080(0x40);
-Sensor sensor_0 = Sensor(sensor,2);
-
-
-
+// HDC2080 sensor = HDC2080(0x40);
+ Sensor sensor_0 = Sensor(0);
+// Sensor sensor_1 = Sensor(sensor,7);
+// Sensor sensor_2 = Sensor(sensor,2);
+float sen0,sen1,sen2;
+unsigned long prevMillis =0;
 
 //Bluetooth BT;
-
 
 void setup(){
     //Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
     //BT.begin(BAUDRATE);
-
+Wire.begin();
 Serial.begin(BAUDRATE);
-
 Serial.println("hey");
 
-
-
+sensor_0.begin();
+// sensor_1.begin();
+// sensor_2.begin();
 
 }
 
 void loop(){
+   unsigned long currentMillis= millis();
 
+    if(  currentMillis - prevMillis >= INTERVAL){
+       sen0 = sensor_0.getTemperature();
+        Serial.print("Temperature reading from sensor : "); Serial.println(sen0);
+        prevMillis =  currentMillis;
+    }
 
-
-    // //Simple test to see if inheritance worked, and see if anything is in the bluetooth's buffer
-    // while(BT.available() >0){
-    //     char c;
-    //     String line;
-    //     while (BT.available() >0){
-    //         c = BT.read();
-    //         line+=c;
-    //     }
-        
-    //     Serial.println(line);
-    // }
-    // while(Serial.available() > 0){
-    //     BT.println(Serial.read());
-    // }
-
-    // if(BT.isConnected() && !prevPrint){
-    //     Serial.println("Bluetooth Connected");
-    //     prevPrint=true;
-    // }else if (!BT.isConnected() && prevPrint){
-    //     Serial.println("Lost connection");
-    //     prevPrint=false;
-    // }
 }
