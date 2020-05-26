@@ -24,6 +24,8 @@ void Sensor::moveToPort(void){
 }
 
 void Sensor::begin(void){
+    //Move to the port the sensor is connected to on the multiplexer
+    moveToPort();
     // Initialize I2C communication
     this->sensorPtr->begin();
   // Begin with a device reset
@@ -42,10 +44,27 @@ void Sensor::begin(void){
 }
 
 float Sensor::getHumidity(void){
+    //move to the port the sensor is on to get reliable reading
+    moveToPort();
+    //return the reading
     return this->sensorPtr->readHumidity();
 }
 
 float Sensor::getTemperature(void){
+    //move to the port the sensor is on to get reliable reading
+    moveToPort();
+    //return the reading
     return this->sensorPtr->readTemp();
+}
+
+void Sensor::performHeatCycle(int duration){
+    //enable the heating element
+    this->sensorPtr->enableHeater();
+    //pause for the duration 
+    //******************
+    //change this to something better;
+    delay(duration);
+    //disable the heating element 
+    this->sensorPtr->disableHeater();
 }
 
