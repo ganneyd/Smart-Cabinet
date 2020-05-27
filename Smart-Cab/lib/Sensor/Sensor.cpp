@@ -2,20 +2,17 @@
 
 
 Sensor::Sensor(uint8_t bus):sensorPtr(0x40){
-    ARDUINOTRACE_INIT(BAUDRATE);
-    TRACE();
+    
     this->sensorPtr= HDC2080(0x40);
-    DUMP(this->bus);
+    
     this->bus = bus;
-    DUMP(this->bus);
+    
 }
 Sensor::~Sensor(void){
    
 }
 
 void Sensor::moveToPort(void){
-    TRACE();
-    DUMP(this->bus);
      //begin the transmission to the multiplexer
         Wire.beginTransmission(0x70);
         //write the bus/port to be used 
@@ -26,7 +23,6 @@ void Sensor::moveToPort(void){
 
 void Sensor::begin(void){
     //Move to the port the sensor is connected to on the multiplexer
-    TRACE();
     moveToPort();
     // Initialize I2C communication
 
@@ -58,7 +54,6 @@ float Sensor::getHumidity(void){
 }
 
 float Sensor::getTemperature(void){
-    TRACE();
     //move to the port the sensor is on to get reliable reading
     moveToPort();
     //return the reading
