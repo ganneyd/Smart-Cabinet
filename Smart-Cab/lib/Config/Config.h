@@ -1,6 +1,7 @@
 #pragma once
 
 #define BAUDRATE 9600
+#define EXPANDER_ADDR 0x3E
 //open file and extract saved config
 //which light was turned on or off
 //save temperature / humidity range  based on emulsion type
