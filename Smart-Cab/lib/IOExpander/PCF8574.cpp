@@ -27,15 +27,14 @@
 
 #include "PCF8574.h"
 #include "Wire.h"
+#include "../Config/Config.h"
 
 /**
  * Constructor
  * @param address: i2c address
  */
-PCF8574::PCF8574(uint8_t address){
+PCF8574::PCF8574():_address(EXPANDER_ADDR){
 	_wire = &Wire;
-
-	_address = address;
 };
 
 /**
