@@ -4,17 +4,16 @@ Sensors::Sensors(unsigned int num)
 {
     add(num);
 }
-void Sensors::add(uint8_t bus){
+void Sensors::addAtBus(uint8_t bus){
     connectedSensors++;
     
-    sensorArray[connectedSensors] = new Sensor(bus);
+    sensorArray[connectedSensors] =  new Sensor(bus);
 }
 
 void Sensors::add( unsigned int num){
 
     for(unsigned int i=0; i<num;i++){
-        connectedSensors++;
-        sensorArray[connectedSensors] =  new Sensor(connectedSensors);
+        addAtBus(i);
     }
 }
 void Sensors::begin(){
@@ -25,7 +24,7 @@ void Sensors::begin(){
 float Sensors::getTemp(){
     float tempTotal = 0;
    for(unsigned int i=0; i <= connectedSensors ; i++){
-        tempTotal += sensorArray[i]->getTemperature();
+        tempTotal += getTemp(i);
     }
     float tempAvg = tempTotal / (connectedSensors+1);
     return tempAvg;
@@ -35,6 +34,3 @@ float Sensors::getTemp(int sensorPort){
     return sensorArray[sensorPort]->getTemperature();
 }
 
-Sensors::~Sensors()
-{
-}

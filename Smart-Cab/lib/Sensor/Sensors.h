@@ -14,12 +14,12 @@ private:
      unsigned int connectedSensors = -1;
 public:
     Sensors(unsigned int num);
-    void add(uint8_t bus);
+    void addAtBus(uint8_t bus);
     void begin();
     float getTemp(int sensorPort);
     float getTemp();
     
-    ~Sensors();
+   //~Sensors();
 };
 
 

@@ -6,7 +6,7 @@ Sensor::Sensor(uint8_t bus):sensorPtr(0x40){
     this->sensorPtr= HDC2080(0x40);
     
     this->bus = bus;
-    
+
 }
 Sensor::~Sensor(void){
    
