@@ -1,15 +1,13 @@
 #include "Led.h"
-
-LED::LED(boolean toggleArray[5]={1,1,1,1,1})
-:LEDToggleArray(toggleArray),ledExpander(){
-    begin();
-}
+extern IOExpander globalExpander;
+LED::LED():expander(globalExpander)
+{}
 
 void LED::toggle(int ledPin){
     //Change value of LED pin state in array
-    LEDToggleArray[ledPin] = !LEDToggleArray[ledPin];
+    toggleArray[ledPin] = !toggleArray[ledPin];
     //change led state on the IC 
-    ledExpander.digitalWrite(ledPin, LEDToggleArray[ledPin]);
+    expander.IO_digitalWrite(ledPin, toggleArray[ledPin]);
     
 }
 
@@ -24,6 +22,6 @@ void LED::operator[](int ledPin){
 void  LED::begin(){
     for(int i =0; i < 5 ; i++){
         //write to led pin and pass state (on or off)
-        ledExpander.digitalWrite(i,LEDToggleArray[i]);
+        expander.IO_digitalWrite(i,toggleArray[i]);
     }
 }

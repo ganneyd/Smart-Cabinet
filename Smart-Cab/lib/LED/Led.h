@@ -11,17 +11,19 @@
 class LED{
 
     private:
-    IOExpander ledExpander;
-    boolean LEDToggleArray[5];
+
+     IOExpander expander;
+      boolean toggleArray[5] = {1,1,1,1,1};
+    
+    //extern IOExpander expander;
      //toggle pin off or on
     void toggle(int ledPin);
+     
     public:
     //constructor for LED with default array that turns off all the lights
-    LED(boolean toggleArray[5]={1,1,1,1,1});
-
-   
+    LED();
     //set the state of the LED pins
     void begin();
     //overload the [] operator so we can access the led like an array to provide cleaner code
     void  operator[](int);
-}
+};
