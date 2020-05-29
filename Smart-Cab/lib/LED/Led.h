@@ -13,7 +13,7 @@ class LED{
     private:
 
      IOExpander expander;
-      boolean toggleArray[5] = {1,1,1,1,1};
+      boolean toggleArray[NUM_LEDS] = {1,1,1,1,1};
     
     //extern IOExpander expander;
      //toggle pin off or on

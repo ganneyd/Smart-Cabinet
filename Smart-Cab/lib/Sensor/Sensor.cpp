@@ -1,9 +1,9 @@
 #include "Sensor.h"
 
 
-Sensor::Sensor(uint8_t bus):sensorPtr(0x40){
+Sensor::Sensor(uint8_t bus):sensorPtr(SENOR_ADDR){
     
-    this->sensorPtr= HDC2080(0x40);
+    this->sensorPtr= HDC2080(SENOR_ADDR);
     
     this->bus = bus;
 
@@ -14,7 +14,7 @@ Sensor::~Sensor(void){
 
 void Sensor::moveToPort(void){
      //begin the transmission to the multiplexer
-        Wire.beginTransmission(0x70);
+        Wire.beginTransmission(MULTIPLEXER_ADDR);
         //write the bus/port to be used 
         Wire.write(1<<this->bus);
         //close off the transmission
