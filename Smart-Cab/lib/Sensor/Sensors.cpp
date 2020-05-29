@@ -41,7 +41,7 @@ float Sensors::getTemp(){
     //numeric value of connected sensors
     float tempAvg = tempTotal / (connectedSensors+1);
     //check to see if temperature avg reading is in acceptable range 
-    checkRange(tempAvg);
+   // checkRange(tempAvg);
     //return the average temperature
     return tempAvg;
 }
@@ -57,7 +57,7 @@ float Sensors::getHumidity(){
     //iterate through all connected sensors and get humidity reading
     for(unsigned int i; i <= connectedSensors; i++){
         //add reading for sensor(i) to total
-        humidityTotal +=getHumid(i);
+        humidityTotal +=getHumidity(i);
     }
 
     //return the average based on number of connected sensors ( add one to reflect actual num of sensors)
@@ -70,3 +70,4 @@ float Sensors::getHumidity(){
      //return humidity reading for sensor at port specified by sensorPort variable param
      return sensorArray[sensorPort]->getHumidity();
  }
+
