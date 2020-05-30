@@ -27,3 +27,6 @@ void  LED::begin(){
         expander.IO_digitalWrite(i,toggleArray[i]);
     }
 }
+
+
+LED LED_INSTANCE = LED();

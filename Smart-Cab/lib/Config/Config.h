@@ -15,6 +15,9 @@
 #define STATEPIN 8
 
 
+#define SERIAL_TYPE SoftWareSerial
+
+
 //open file and extract saved config
 //which light was turned on or  off
 //save temperature / humidity range  based on emulsion type

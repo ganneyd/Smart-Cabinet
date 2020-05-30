@@ -4,19 +4,11 @@
 #include "../Sensor/Sensors.h"
 #include <Wire.h>
 #include "../Led/Led.h"
-#include "../Commands/Command.h"
 #define INTERVAL 5000
 
 Bluetooth BT;
 Sensors sensors=Sensors(3);
-LED led = LED();
-
-Command<int,LED,HardwareSerial> led_command = Command<int,LED,HardwareSerial>("LT",
-[](int ledPin,LED led_obj, HardwareSerial serial){
-    led_obj[ledPin];
-    serial.println("Successful in toggling led : " + ledPin);
-    serial.flush();
-});
+extern LED LED_INSTANCE;
 
 void setup(){
 //Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
@@ -26,16 +18,12 @@ Wire.begin();
 //Start communication between arduino and computer
 Serial.begin(BAUDRATE);
 sensors.begin();
-led.begin();
-Serial.println(led_command.getName());
+LED_INSTANCE.begin();
+
 }
 
 void loop(){
-   for(int i =0; i < 3; i++){
-    led_command.command_func(i,led,Serial);
-    Serial.flush();
-       delay(2000);
-   }
+   
 
   
 
