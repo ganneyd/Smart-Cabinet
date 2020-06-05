@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "Smart-Cab",
+			"path": ".."
+		},
+		{
+			"name": "ex",
+			"path": "..\\..\\..\\..\\Documents\\PlatformIO\\Projects\\ex"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"leds"
+		]
+	}
+}
