@@ -1,29 +1,127 @@
 #include "Arduino.h"
-#include <../lib/Bluetooth/Bluetooth.h>
-#include "../Config/Config.h"
-#include "../Sensor/Sensors.h"
+ #include "header.h"
 #include <Wire.h>
-#include "../Led/Led.h"
+
+
+
 #define INTERVAL 5000
 
-Bluetooth BT;
-Sensors sensors=Sensors(3);
+Config config = Config(INTERVAL,INTERVAL);
+extern Bluetooth BT_INSTANCE;
 extern LED LED_INSTANCE;
+extern Sensors SENSORS_INSTANCE;
+
+//command that changes the pin or name of the the bluetooth module
+Command *np_bt_command = new Command("CB","Changes the name and or pin of the bluetooth module",[](const void* newBTName, const void* newPin){
+    const char* name = (const char*)newBTName;
+    unsigned int pin = (unsigned int)newPin;
+    const char* validPin = (const char*) pin;
+
+    if(name != NULL){
+        BT_INSTANCE.setName(name);
+    }
+    if(sizeof(validPin) == 4)
+        BT_INSTANCE.setPin(pin);
+    
+});
+
+//command that sets emulsion being used
+Command *s_mode_command = new Command("SE","Sets the mode  being used to dry the screens",[](const void* modeName, const void* notUsed){
+    //in the future we will look for the mode's name in the mode.config.txt but
+    //for now just take the mode's info from user
+    config.setMode((const char*)modeName,50,20);
+    
+     
+
+});
+//command to enable heating element 
+Command *h_sensor_command = new Command("HS","Enables heating element on sensors or specific sensor",[](const void* port, const void* all){
+    int _port = (int)port;
+    if(_port >-1 ){
+        DUMP(_port);
+        SENSORS_INSTANCE.enableHeater(_port);
+    }else{
+        SENSORS_INSTANCE.enableHeater(); 
+    }
+});
+//command to toggle leds
+Command *led_command =  new Command("LT","Toggles led on or off, whether specific or toggle all on/off",[](const void* port, const void* turnAllOffOn){
+        int _port = (int)port;
+        bool _turnAllOffOn = (bool)turnAllOffOn;
+
+
+        if(_port != -1){  
+         LED_INSTANCE[_port];
+        return;
+        }
+        else{
+            LED_INSTANCE.turnOffOn(_turnAllOffOn);
+        }
+        
+    });
+
+//Commands that gets temp and humidity reading or just one of them
+Command *g_sensor_command = new Command("GS", "Description", [](const void* humidity, const void* temperature){
+    bool _humidity = (bool)humidity;
+    bool _temperature = (bool)temperature;
+    if(_humidity){
+        Serial.print("Humidity is : ");
+        Serial.println(SENSORS_INSTANCE.getHumidity());
+    }
+
+    if(_temperature){
+        Serial.print("Temperature  is : ");
+        Serial.println(SENSORS_INSTANCE.getTemp());
+    }
+
+});
+unsigned long previousMillis_1, previousMillis_2;
+
+Commands comms = Commands();
+
 
 void setup(){
+Wire.begin();
+Serial.begin(BAUDRATE);
+SENSORS_INSTANCE.begin();
+
 //Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
-BT.begin(BAUDRATE);
+BT_INSTANCE.begin(BAUDRATE);  
 //Start I2C communication 
 Wire.begin();
 //Start communication between arduino and computer
-Serial.begin(BAUDRATE);
-sensors.begin();
+
+ 
+
 LED_INSTANCE.begin();
 
+comms.addCommand(g_sensor_command);
+comms.addCommand(h_sensor_command);
+comms.addCommand(led_command);
+
+
+
+   comms.findCommand("GS",(const void*)0,(const void*)true);
 }
 
 void loop(){
-   
+
+
+  
+//  unsigned long currentMillis= millis();
+
+//     if(  currentMillis - previousMillis_1 >= 3000){
+//       comms.findCommand("GS",(const void*)true,(const void*)true);
+//       previousMillis_1 = currentMillis;
+//     }
+
+//      if(  currentMillis - previousMillis_2 >= 1000){
+//       comms.findCommand("LT",(const void*)0,(const void*)true);
+//       delay(500);
+//       previousMillis_2 = currentMillis;
+//     }
+
+
 
   
 
