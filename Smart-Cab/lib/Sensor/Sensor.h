@@ -1,9 +1,9 @@
 #pragma once
 
-#include <HDC2080.h>
+#include "HDC2080.h"
 #include <Wire.h>
-#include "../Macros\ArdunioTrace.h"
-#include "../Config/Config.h"
+#include "ArdunioTrace.h"
+#include "Define.h"
 
 class Sensor{
 

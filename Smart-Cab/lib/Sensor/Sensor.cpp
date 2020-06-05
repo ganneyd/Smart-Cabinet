@@ -13,15 +13,19 @@ Sensor::~Sensor(void){
 }
 
 void Sensor::moveToPort(void){
+    
      //begin the transmission to the multiplexer
         Wire.beginTransmission(MULTIPLEXER_ADDR);
         //write the bus/port to be used 
         Wire.write(1<<this->bus);
         //close off the transmission
         Wire.endTransmission();
+        
 }
 
 void Sensor::begin(void){
+    
+    
     //Move to the port the sensor is connected to on the multiplexer
     moveToPort();
     // Initialize I2C communication
@@ -47,6 +51,7 @@ void Sensor::begin(void){
 }
 
 float Sensor::getHumidity(void){
+    
     //move to the port the sensor is on to get reliable reading
     moveToPort();
     //return the reading
@@ -54,6 +59,7 @@ float Sensor::getHumidity(void){
 }
 
 float Sensor::getTemperature(void){
+    
     //move to the port the sensor is on to get reliable reading
     moveToPort();
     //return the reading
@@ -64,6 +70,7 @@ void Sensor::performHeatCycle(int duration){
     //move to the port for this sensor on the multiplexer to ensure the correct sensor's 
     //heating element is enabled
     moveToPort();
+    DUMP(duration);
     //enable the heating element
     this->sensorPtr.enableHeater();
     //pause for the duration 
@@ -72,6 +79,7 @@ void Sensor::performHeatCycle(int duration){
     delay(duration);
     //disable the heating element 
     this->sensorPtr.disableHeater();
+    TRACE();
 }
 
 int Sensor::getBus(){
