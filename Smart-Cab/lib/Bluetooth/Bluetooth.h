@@ -1,10 +1,9 @@
 
-#ifndef Bluetooth_h
-#define Bluetooth_h
+#pragma once
 
-#include "SoftwareSerial.h"
-#include "Arduino.h"
-#include "../Config/Config.h"
+#include <Arduino.h>
+#include <SoftwareSerial.h>
+#include "Define.h"
 //Inherit the SoftwareSerial class and wrap in our Bluetooth config to add additional
 // features such as changing the baudrate, pin and name etc of the bluetooth module and see if
 //there is a connection.
@@ -23,8 +22,14 @@ public:
     
     //check and see if bluetooth module is connected
     bool isConnected();
+    //set Name for bluetooth
+    void setName(const char* name);
+
+    //set pin for bluetooth
+    void setPin(unsigned int pin);
+
+    //enter AT+Mode
+    void sendMsg(const char* msg);
 
 
 };
-
-#endif
