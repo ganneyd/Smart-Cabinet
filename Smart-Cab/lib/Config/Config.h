@@ -1,26 +1,69 @@
 #pragma once
-//Buadrate we plan to use by default 
-#define BAUDRATE 9600
-//PCF8574 I/O Expander address 
-#define EXPANDER_ADDR 0x3E
-//number of leds we plan to drive
-#define NUM_LEDS 6
-//address for the HDC2080 Temperature/Humidity Sensor
-#define SENOR_ADDR 0x40
-#define MULTIPLEXER_ADDR 0x70
-//Pins used by arduino to receive and transmit data to bluetooth module
-#define RX 2 
-#define TX 3
-//Pin   connected to the state pin of the bluetooth module
-#define STATEPIN 8
 
 
-#define SERIAL_TYPE SoftWareSerial
+#include <Bluetooth.h>
 
+#include "Sensors.h"
 
 //open file and extract saved config
 //which light was turned on or  off
 //save temperature / humidity range  based on emulsion type
 //allow for history save on temperature/humidity reading history so we can use readings to plot graphs
 //^^timestamp
+extern Bluetooth BT_INSTANCE;
+
+extern Sensors SENSORS_INSTANCE;
+
+class Config
+{
+private:
+        
+        //Save pointer to sensors class 
+        Sensors* l_Sensors;
+        //Hold the set frequency for the temperature 
+    unsigned int temphumid_frequency;
+    //The frequency at which the config state should be saved to the SD Card
+    unsigned int save_frequency;
+public:
+    Config(unsigned int th_freq,unsigned int s_freq )
+    :l_Sensors(&SENSORS_INSTANCE), temphumid_frequency(th_freq),save_frequency(s_freq){
+
+    }
+
+    //Setters
+
+    //set the temperature humidity readings interval 
+    void setTHFreq(unsigned int th_freq){
+        temphumid_frequency = th_freq;
+    }
+    //set the save frequency 
+    void setSFreq(unsigned int s_freq){
+        save_frequency = s_freq;
+    }
+    
+    //set the drying mode 
+    void setMode( const char* mode_name, unsigned int mode_t, unsigned int mode_h){
+        l_Sensors->setRange(mode_name,mode_t,mode_h);
+    }
+
+    //getters
+
+    //get temperature and humidity reading frequency 
+    unsigned int getTHFreq(){
+        return temphumid_frequency;
+    }
+
+    //get save frequency 
+    unsigned int getSFreq(){
+        return save_frequency;
+    }
+
+    
+    ~Config(){
+        
+        delete l_Sensors;
+    }
+};
+
+
 
