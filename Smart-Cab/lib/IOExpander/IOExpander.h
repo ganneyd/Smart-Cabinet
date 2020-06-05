@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PCF8574.h"
-#include "../Config/Config.h"
 
 struct IOExpander:protected PCF8574{
 

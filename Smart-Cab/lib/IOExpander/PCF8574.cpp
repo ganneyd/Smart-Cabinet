@@ -27,7 +27,7 @@
 
 #include "PCF8574.h"
 #include "Wire.h"
-#include "../Config/Config.h"
+#include "Define.h"
 
 /**
  * Constructor
