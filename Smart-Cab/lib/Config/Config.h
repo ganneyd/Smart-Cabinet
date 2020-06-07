@@ -44,10 +44,14 @@ public:
     //set the drying mode 
     void setMode( const char* mode_name, unsigned int mode_t, unsigned int mode_h){
         l_Sensors->setRange(mode_name,mode_t,mode_h);
+        
     }
 
     //getters
 
+    const char* getMode(){
+        return l_Sensors->getMode();
+    }
     //get temperature and humidity reading frequency 
     unsigned int getTHFreq(){
         return temphumid_frequency;
