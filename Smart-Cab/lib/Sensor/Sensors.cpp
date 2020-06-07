@@ -34,18 +34,6 @@ void Sensors::begin(){
     }
     
 }
-//activate specific sensor's heater
-void Sensors::enableHeater(int sensorPort){
-    sensorArray[sensorPort]->performHeatCycle(this->duration);
-}
-
-//activate all sensor's heating element 
-void Sensors::enableHeater(){
-    for(unsigned int i=0; i < connectedSensors+1 ; i++){
-        
-        enableHeater(i);
-    }
-}
 
 //return the average temperature reading
 float Sensors::getTemp(void){

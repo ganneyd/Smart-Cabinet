@@ -25,10 +25,6 @@ public:
     //initialize all the sensors
     void begin();
     //activate heating element
-    void enableHeater(int sensorPort);
-    //overload to activate all heaters
-    void enableHeater();
-    //sets the temperature range and humidity range for sensors
     void setRange(const char* dryingMode, float maxTemp, float maxHumidity);
     //checks if readings are within range set
     int checkRange();

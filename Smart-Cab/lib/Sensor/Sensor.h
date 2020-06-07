@@ -36,8 +36,7 @@ class Sensor{
     //gets the temperature reading from the sensor and returns the value
     float getTemperature(void);
 
-    //enables the heating element of the sensor to get rid of humidity residue so that a more accurate reading is performed
-    void performHeatCycle(int duration);
+    
 
     int getBus();
 
