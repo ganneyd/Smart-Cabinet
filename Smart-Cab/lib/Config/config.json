@@ -1,0 +1,47 @@
+//sample config file
+
+{
+	//sensors specifying which port they are connected to (will be numerated on pcb) and which group they belong to 
+	"sensor": [
+		{
+			"port": 0,
+			"group": 1
+		},
+		{
+			"port": 1,
+			"group": 1
+		},
+		{
+			"port": 2,
+			"group": 1
+		},
+		{
+			"port": 3,
+			"group": 1
+		},
+		{
+			"port": 4,
+			"group": 1
+		},
+		{
+			"port": 5,
+			"group": 1
+		},
+		{
+			"port": 6,
+			"group": 1
+		},
+		{
+			"port": 7,
+			"group": 1
+		}
+	],
+	//how oftent to conduct measurements in mins
+	"measurement-freq": 5,
+	//how often to save configurations***
+	"saving-freq": 5,
+	//which group to check range on
+	"check-group": 1,
+	//which mode should be used by default
+	"default-mode": "Normal"
+}
