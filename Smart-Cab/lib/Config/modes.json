@@ -1,0 +1,16 @@
+//this is what we will search for the modes
+//users will be able to open this file and add new modes or save modes added over the bluetooth connection
+
+
+{"modes":[
+    {
+   "name": "Fast",
+   "max-humidity": 70,
+   "max-temp": 27
+}, {
+   "name": "Normal",
+   "max-humidity": 70,
+   "max-temp": 27
+}
+]
+}
