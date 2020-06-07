@@ -66,21 +66,6 @@ float Sensor::getTemperature(void){
     return this->sensorPtr.readTemp();
 }
 
-void Sensor::performHeatCycle(int duration){
-    //move to the port for this sensor on the multiplexer to ensure the correct sensor's 
-    //heating element is enabled
-    moveToPort();
-    DUMP(duration);
-    //enable the heating element
-    this->sensorPtr.enableHeater();
-    //pause for the duration 
-    //******************
-    //change this to something better;
-    delay(duration);
-    //disable the heating element 
-    this->sensorPtr.disableHeater();
-    TRACE();
-}
 
 int Sensor::getBus(){
     return this->bus;

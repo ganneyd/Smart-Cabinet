@@ -1,10 +1,15 @@
 #include "Arduino.h"
  #include "header.h"
 #include <Wire.h>
-
+#include "ArduinoJson-v6.15.2.h"
 
 
 #define INTERVAL 5000
+
+const size_t capacity = JSON_OBJECT_SIZE(3)+20;
+StaticJsonDocument<capacity> doc;
+
+
 
 Config config = Config(INTERVAL,INTERVAL);
 extern Bluetooth BT_INSTANCE;
@@ -33,16 +38,6 @@ Command *s_mode_command = new Command("SE","Sets the mode  being used to dry the
     
      
 
-});
-//command to enable heating element 
-Command *h_sensor_command = new Command("HS","Enables heating element on sensors or specific sensor",[](const void* port, const void* all){
-    int _port = (int)port;
-    if(_port >-1 ){
-        DUMP(_port);
-        SENSORS_INSTANCE.enableHeater(_port);
-    }else{
-        SENSORS_INSTANCE.enableHeater(); 
-    }
 });
 //command to toggle leds
 Command *led_command =  new Command("LT","Toggles led on or off, whether specific or toggle all on/off",[](const void* port, const void* turnAllOffOn){
@@ -83,10 +78,10 @@ Commands comms = Commands();
 void setup(){
 Wire.begin();
 Serial.begin(BAUDRATE);
-SENSORS_INSTANCE.begin();
-
 //Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
 BT_INSTANCE.begin(BAUDRATE);  
+SENSORS_INSTANCE.begin();
+
 //Start I2C communication 
 Wire.begin();
 //Start communication between arduino and computer
@@ -96,15 +91,24 @@ Wire.begin();
 LED_INSTANCE.begin();
 
 comms.addCommand(g_sensor_command);
-comms.addCommand(h_sensor_command);
 comms.addCommand(led_command);
+comms.addCommand(s_mode_command);
+comms.addCommand(np_bt_command);
 
 
 
-   comms.findCommand("GS",(const void*)0,(const void*)true);
+   
 }
 
 void loop(){
+if(BT_INSTANCE.available()){
+  deserializeJson(doc,BT_INSTANCE);
+  comms.findCommand(doc["cmd"].as<char *>(),(const void*) doc["var1"].as<int>(),(const void*) doc["var2"].as<int>());
+  while(BT_INSTANCE.available()>0){
+  BT_INSTANCE.read();
+}
+}
+}
 
 
   
@@ -125,4 +129,3 @@ void loop(){
 
   
 
-}

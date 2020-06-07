@@ -52,6 +52,7 @@ class SortedArray{
     Command* findCommand(const char* command_name){
         int obj_pos = binarySearch(command_name,0, elmNum);
         DUMP(command_name);
+        DUMP(sizeof(command_name));
         DUMP(obj_pos);
         DUMP(elmNum);
 
