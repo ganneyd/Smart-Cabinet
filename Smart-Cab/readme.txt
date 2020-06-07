@@ -27,7 +27,7 @@ get configuration on Start up && request
 
 
 setup arduino JSON to 
-	-get request
-	-send response
+	*-get request
+	*-send response
 	-load config
 	-save config v

@@ -6,15 +6,20 @@
 
 #define INTERVAL 5000
 
-const size_t capacity = JSON_OBJECT_SIZE(3)+20;
-StaticJsonDocument<capacity> doc;
-
+const size_t req_capacity = JSON_OBJECT_SIZE(3)+20;
+const size_t res_capacity = JSON_OBJECT_SIZE(4)+40;
+//Json document that handles the request sent by the user
+StaticJsonDocument<req_capacity> req_doc;
+//Json document that handles the response that is sent to the user
+//specifying if the request was valid or not
+StaticJsonDocument<res_capacity> res_doc;
 
 
 Config config = Config(INTERVAL,INTERVAL);
 extern Bluetooth BT_INSTANCE;
 extern LED LED_INSTANCE;
 extern Sensors SENSORS_INSTANCE;
+Commands comms = Commands();
 
 //command that changes the pin or name of the the bluetooth module
 Command *np_bt_command = new Command("CB","Changes the name and or pin of the bluetooth module",[](const void* newBTName, const void* newPin){
@@ -62,48 +67,65 @@ Command *g_sensor_command = new Command("GS", "Description", [](const void* humi
     if(_humidity){
         Serial.print("Humidity is : ");
         Serial.println(SENSORS_INSTANCE.getHumidity());
+        res_doc["h"].set(SENSORS_INSTANCE.getHumidity());
     }
 
     if(_temperature){
         Serial.print("Temperature  is : ");
         Serial.println(SENSORS_INSTANCE.getTemp());
+        res_doc["t"].set(SENSORS_INSTANCE.getTemp());
     }
 
 });
 unsigned long previousMillis_1, previousMillis_2;
 
-Commands comms = Commands();
+
 
 
 void setup(){
-Wire.begin();
-Serial.begin(BAUDRATE);
-//Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
-BT_INSTANCE.begin(BAUDRATE);  
-SENSORS_INSTANCE.begin();
-
-//Start I2C communication 
+//Begin communication on I2C bus
 Wire.begin();
 //Start communication between arduino and computer
-
- 
+//For debugging only
+Serial.begin(BAUDRATE);
+//Initialize the bluetooth communicationa and specify the baudrate(speed to communicate at)
+BT_INSTANCE.begin(BAUDRATE); 
+//Initialize the sensors 
+SENSORS_INSTANCE.begin();
 
 LED_INSTANCE.begin();
 
-comms.addCommand(g_sensor_command);
-comms.addCommand(led_command);
-comms.addCommand(s_mode_command);
-comms.addCommand(np_bt_command);
-
-
-
-   
+    comms.addCommand(g_sensor_command);
+    comms.addCommand(led_command);
+    comms.addCommand(s_mode_command);
+    comms.addCommand(np_bt_command);  
 }
 
 void loop(){
+
+//Check if anyting is available in the buffer
 if(BT_INSTANCE.available()){
-  deserializeJson(doc,BT_INSTANCE);
-  comms.findCommand(doc["cmd"].as<char *>(),(const void*) doc["var1"].as<int>(),(const void*) doc["var2"].as<int>());
+    req_doc.to<JsonObject>();
+    //deserialize json document
+  DeserializationError err = deserializeJson(req_doc,BT_INSTANCE);
+  //check if its successful
+  if(err){
+      //if not successful send response with err code to user
+      res_doc["res"].set(err.c_str());
+  }else{
+      bool found;
+      if(req_doc.containsKey("var_name")){
+         found = comms.findCommand(req_doc["cmd"].as<char *>(),(const void*) req_doc["var_name"].as<char *>(),(const void*) req_doc["var2"].as<int>());
+         
+      }else{
+        found = comms.findCommand(req_doc["cmd"].as<char *>(),(const void*) req_doc["var1"].as<int>(),(const void*) req_doc["var2"].as<int>());
+      }
+    //if  successful send response with err code to user after command was completed 
+    res_doc["res"].set(err.c_str());
+    res_doc["cmd"].set(found);
+    
+  }
+  serializeJson(res_doc,BT_INSTANCE);
   while(BT_INSTANCE.available()>0){
   BT_INSTANCE.read();
 }
