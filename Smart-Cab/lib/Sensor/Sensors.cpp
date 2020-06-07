@@ -84,7 +84,7 @@ float Sensors::getHumidity(void){
  }
 //sets the max temperature and humidity range  as well as the mode it is on
 void Sensors::setRange(const char* dryingMode, float maxT, float maxH){
-    this->drying_mode = drying_mode;
+    this->drying_mode = dryingMode;
     this->max_temp = maxT;
     this->max_humidity= maxH;
 }
