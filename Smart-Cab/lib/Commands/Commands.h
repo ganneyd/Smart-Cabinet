@@ -2,7 +2,7 @@
 
 #include "Command.h"
 #include <Arduino.h>
-#include "../SortedLinkedList/SortedLinkedList.h"
+#include "../SortedArray/SortedArray.h"
 
 class Commands
 {
