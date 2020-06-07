@@ -20,6 +20,7 @@ get configuration on Start up && request
 			*emulsion class
 		-interval for readings
 			*config class
+			//omitted bluetooth for now
 		-bluetooth name
 			*bluetooth class
 		-bluetooth pin
