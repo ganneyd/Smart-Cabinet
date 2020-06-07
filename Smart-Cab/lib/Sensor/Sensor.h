@@ -18,8 +18,10 @@ class Sensor{
 
     //Enable to change the port we are currently communicating to on the multiplexer so we can distinguish the 
     //sensors currently attached to it 
+
     void moveToPort(void);
-    
+    //group the sensor belongs to
+    uint8_t group_num;
     public:
 
     Sensor(void);
@@ -36,6 +38,11 @@ class Sensor{
     //gets the temperature reading from the sensor and returns the value
     float getTemperature(void);
 
+    //sets the group number of the sensor
+    void setGroup(uint8_t groupNum);
+
+    //returns the group number of the sensor
+    uint8_t getGroup();
     
 
     int getBus();

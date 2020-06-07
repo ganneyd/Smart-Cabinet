@@ -70,3 +70,11 @@ float Sensor::getTemperature(void){
 int Sensor::getBus(){
     return this->bus;
 }
+
+void  Sensor::setGroup(uint8_t groupNum){
+    this->group_num = groupNum;
+}
+
+uint8_t Sensor::getGroup(){
+    return this->group_num;
+}

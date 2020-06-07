@@ -18,6 +18,7 @@ private:
      int duration =3000;
      float max_temp, max_humidity;
      const char* drying_mode;
+     int num_groups;
 public:
     Sensors(unsigned int num);
     //add sensor at a port number (bus) on the multiplexer
@@ -27,17 +28,15 @@ public:
     //activate heating element
     void setRange(const char* dryingMode, float maxTemp, float maxHumidity);
     //checks if readings are within range set
-    int checkRange();
+    int checkRange(int sensorGroup);
     //returns the drying mode
     const char* getMode();
-    //get specific temperature reading for a particular sensor
-    float getTemp(int sensorPort);
-    //get averaged temperature fro all connected sensors
-    float getTemp(void);
+    //set group for sensor
+    void setGroup(int sensorPort, uint8_t groupNum);
+    //get specific temperature reading for a particular sensor group
+    float getTemp(int sensorGroup);
     //get specific humidity reading for a particular sensor
-    float getHumidity(int sensorPort);
-    //get average humidity reading 
-    float getHumidity(void);
+    float getHumidity(int sensorGroup);
     
     ~Sensors();
 };

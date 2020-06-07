@@ -17,6 +17,10 @@ void Sensors::addAtBus(uint8_t bus){
     //add sensor to array and specify bus as passed in the function
     sensorArray[connectedSensors] =  new Sensor(bus);
 }
+//set group for sensor
+
+void setGroup(int sensorPort)
+
 //add a number of sensors at once
 void Sensors::add( unsigned int num){
     //iterate for num times and add a sensor
@@ -36,52 +40,53 @@ void Sensors::begin(){
 }
 
 //return the average temperature reading
-float Sensors::getTemp(void){
-    
+float Sensors::getTemp(int sensorGroup){
+    //variable to keep track of sensors read
+    int num;
     //variable to keep track of sensor temperature readings
     float tempTotal = 0;
     //iterate through connected Sensors and get temperature readings
    for(unsigned int i=0; i <= connectedSensors ; i++){
+       //check if sensor's group is equal to the group specified by the user
+       if(sensorArray[i]->getGroup() == sensorGroup){
        //add temperature reading to total
-        tempTotal += getTemp(i);
+        tempTotal += sensorArray[i]->getTemperature();
+        //increment num
+        num++;
+       }
     }
-    //calculate the average temperature based on num of connected sensors , add 1 to the connectedSensors
-    //since when connectedSensors = 0 it represents a connected sensor but adding 1 represnet actual 
-    //numeric value of connected sensors
-    float tempAvg = tempTotal / (connectedSensors+1);
+    //calculate the average temperature based on num of read sensors 
+    float tempAvg = tempTotal / num;
     //check to see if temperature avg reading is in acceptable range 
    // checkRange(tempAvg);
     //return the average temperature
     return tempAvg;
 }
-//return temperature reading for specific sensor
-float Sensors::getTemp(int sensorPort){
-    return sensorArray[sensorPort]->getTemperature();
-}
 
-float Sensors::getHumidity(void){
-    
+
+float Sensors::getHumidity(int sensorGroup){
+    int num=0;
     //variable to add up readings from sensors
     float humidityTotal = 0;
 
     //iterate through all connected sensors and get humidity reading
     for(unsigned int i=0; i <= connectedSensors; i++){
-        //add reading for sensor(i) to total
-        
-        humidityTotal +=getHumidity(i);
+        //check if sensor has same group as specified by the user
+        if(sensorArray[i]->getGroup() == sensorGroup){  
+            //add reading for sensor(i) to total
+                 humidityTotal += sensorArray[i]->getHumidity();
+                 //keep track of how many sensor readings were taken
+                 num++;
+        }
         
     }
 
     //return the average based on number of connected sensors ( add one to reflect actual num of sensors)
     // as connectedSensors = 0 represents a connected sensor
-    return humidityTotal / (connectedSensors +1);
+    return humidityTotal / num;
 
 }
- float Sensors::getHumidity(int sensorPort){
-     //check if connected
-     //return humidity reading for sensor at port specified by sensorPort variable param
-     return sensorArray[sensorPort]->getHumidity();
- }
+ 
 //sets the max temperature and humidity range  as well as the mode it is on
 void Sensors::setRange(const char* dryingMode, float maxT, float maxH){
     this->drying_mode = dryingMode;
@@ -95,11 +100,11 @@ void Sensors::setRange(const char* dryingMode, float maxT, float maxH){
 //3 if dehumidifier should be turned on
 //-3 if dehumidifier should be turned off  -2 if fans stay on and dehumidifier on
 //4 if both should be turned on
-int Sensors::checkRange(){
+int Sensors::checkRange(int sensorGroup){
     int t,h;
     //check temperature 
-    t = getTemp() > max_temp ? 1 :-1;
-    h = getHumidity() >max_humidity ? 3 : -3;
+    t = getTemp(sensorGroup) > max_temp ? 1 :-1;
+    h = getHumidity(sensorGroup) >max_humidity ? 3 : -3;
 
     
     return t+h;
@@ -118,5 +123,9 @@ Sensors::~Sensors(){
     }
 }
 
+
+void Sensors::setGroup(int sensorPort,uint8_t groupNum){
+    sensorArray[sensorPort]->setGroup(groupNum);
+}
 
 Sensors SENSORS_INSTANCE = Sensors(NUM_SENSORS);
