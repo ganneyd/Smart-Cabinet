@@ -66,20 +66,20 @@ Command *led_command =  new Command("LT","Toggles led on or off, whether specifi
         
     });
 
-//Commands that gets temp and humidity reading or just one of them
-Command *g_sensor_command = new Command("GS", "Description", [](const void* humidity, const void* temperature){
-    bool _humidity = (bool)humidity;
-    bool _temperature = (bool)temperature;
-    if(_humidity){
+//Commands that gets temp and humidity reading from a specific group or sets 
+//a sensor's group number
+Command *g_sensor_command = new Command("GS", "Description", [](const void* sensorGroup, const void* sensorPort){
+    int _sensorGroup = (int)sensorGroup;
+    int _sensorPort = (int)sensorPort;
+    if(_sensorPort < 0){
         Serial.print("Humidity is : ");
         Serial.println(SENSORS_INSTANCE.getHumidity());
-       res_doc["h"].set(SENSORS_INSTANCE.getHumidity());
-    }
-
-    if(_temperature){
         Serial.print("Temperature  is : ");
         Serial.println(SENSORS_INSTANCE.getTemp());
         res_doc["t"].set(SENSORS_INSTANCE.getTemp());
+       res_doc["h"].set(SENSORS_INSTANCE.getHumidity());
+    }else{
+        SENSORS_INSTANCE.setGroup(_sensorPort,_sensorGroup);
     }
 
 });
@@ -98,9 +98,10 @@ Serial.begin(BAUDRATE);
 BT_INSTANCE.begin(BAUDRATE); 
 //Initialize the sensors 
 SENSORS_INSTANCE.begin();
-
+//Initialize the leds
 LED_INSTANCE.begin();
-
+//Load configuration and implement it 
+config.begin();
     comms.addCommand(g_sensor_command);
     comms.addCommand(led_command);
     comms.addCommand(s_mode_command);
