@@ -17,12 +17,10 @@ public:
         commandArray.insertObj(command);
     }
 
-    void findCommand(const char* command_name , const void* firstParam, const void* secondParam){
-            commandArray.findCommand(command_name)->action(firstParam,secondParam);
+    bool findCommand(const char* command_name , const void* firstParam, const void* secondParam){
+            return commandArray.findCommand(command_name,firstParam,secondParam);
         }
     
 };
 
-
-//Commands s_Command_Instance = Commands();
 

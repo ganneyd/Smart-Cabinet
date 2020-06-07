@@ -49,7 +49,7 @@ class SortedArray{
     }
     
 
-    Command* findCommand(const char* command_name){
+    bool findCommand(const char* command_name, const void* firstParam, const void* secondParam){
         int obj_pos = binarySearch(command_name,0, elmNum);
         DUMP(command_name);
         DUMP(sizeof(command_name));
@@ -59,13 +59,12 @@ class SortedArray{
         for(int i=0; i < elmNum; i++){
            DUMP(t_array[i]->getName());
         }
-        if (obj_pos == -1){
-
-            return new  Command("ERR","Error",[](const void* param, const void* param_2){
-            
-            });
+        if (obj_pos < 0){
+            return false;
         }
-        return t_array[obj_pos];
+
+        t_array[obj_pos]->action(firstParam,secondParam);
+        return true;
     }
 
     ~SortedArray(){
