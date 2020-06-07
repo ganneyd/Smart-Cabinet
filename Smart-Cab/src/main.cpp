@@ -6,7 +6,7 @@
 
 #define INTERVAL 5000
 
-const size_t req_capacity = JSON_OBJECT_SIZE(3)+20;
+const size_t req_capacity = JSON_OBJECT_SIZE(3)+30;
 const size_t res_capacity = JSON_OBJECT_SIZE(4)+40;
 //Json document that handles the request sent by the user
 StaticJsonDocument<req_capacity> req_doc;
@@ -21,6 +21,7 @@ extern LED LED_INSTANCE;
 extern Sensors SENSORS_INSTANCE;
 Commands comms = Commands();
 
+/*
 //command that changes the pin or name of the the bluetooth module
 Command *np_bt_command = new Command("CB","Changes the name and or pin of the bluetooth module",[](const void* newBTName, const void* newPin){
     const char* name = (const char*)newBTName;
@@ -33,13 +34,18 @@ Command *np_bt_command = new Command("CB","Changes the name and or pin of the bl
     if(sizeof(validPin) == 4)
         BT_INSTANCE.setPin(pin);
     
-});
+});*/
 
 //command that sets emulsion being used
-Command *s_mode_command = new Command("SE","Sets the mode  being used to dry the screens",[](const void* modeName, const void* notUsed){
+Command *s_mode_command = new Command("SE","Sets the mode  being used to dry the screens",[](const void* modeName, const void* getMode){
     //in the future we will look for the mode's name in the mode.config.txt but
     //for now just take the mode's info from user
+    int _getMode = (int) getMode;
+    if(_getMode > 0){
+       res_doc["mode"].set(config.getMode());
+    }else{
     config.setMode((const char*)modeName,50,20);
+    }
     
      
 
@@ -67,7 +73,7 @@ Command *g_sensor_command = new Command("GS", "Description", [](const void* humi
     if(_humidity){
         Serial.print("Humidity is : ");
         Serial.println(SENSORS_INSTANCE.getHumidity());
-        res_doc["h"].set(SENSORS_INSTANCE.getHumidity());
+       res_doc["h"].set(SENSORS_INSTANCE.getHumidity());
     }
 
     if(_temperature){
@@ -98,7 +104,7 @@ LED_INSTANCE.begin();
     comms.addCommand(g_sensor_command);
     comms.addCommand(led_command);
     comms.addCommand(s_mode_command);
-    comms.addCommand(np_bt_command);  
+    //comms.addCommand(np_bt_command);  
 }
 
 void loop(){
@@ -110,8 +116,7 @@ if(BT_INSTANCE.available()){
   DeserializationError err = deserializeJson(req_doc,BT_INSTANCE);
   //check if its successful
   if(err){
-      //if not successful send response with err code to user
-      res_doc["res"].set(err.c_str());
+      //if not successful do nothing
   }else{
       bool found;
       if(req_doc.containsKey("var_name")){
@@ -120,12 +125,13 @@ if(BT_INSTANCE.available()){
       }else{
         found = comms.findCommand(req_doc["cmd"].as<char *>(),(const void*) req_doc["var1"].as<int>(),(const void*) req_doc["var2"].as<int>());
       }
-    //if  successful send response with err code to user after command was completed 
-    res_doc["res"].set(err.c_str());
+      //tell user if command was found or not
     res_doc["cmd"].set(found);
-    
   }
-  serializeJson(res_doc,BT_INSTANCE);
+    
+    //if  successful or not send response with err code  
+    res_doc["res"].set(err.c_str());
+  serializeJsonPretty(res_doc,BT_INSTANCE);
   while(BT_INSTANCE.available()>0){
   BT_INSTANCE.read();
 }

@@ -22,7 +22,7 @@ public:
     
     //check and see if bluetooth module is connected
     bool isConnected();
-    //set Name for bluetooth
+   /* //set Name for bluetooth
     void setName(const char* name);
 
     //set pin for bluetooth
@@ -30,6 +30,7 @@ public:
 
     //enter AT+Mode
     void sendMsg(const char* msg);
+    */
 
 
 };

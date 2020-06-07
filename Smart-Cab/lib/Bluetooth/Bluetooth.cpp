@@ -5,7 +5,7 @@
 bool Bluetooth::isConnected(){
     return digitalRead(STATEPIN);
 }
-
+/*
 //send new name to bluetooth module
 void Bluetooth::setName(const char* name){
     char buffer[40];
@@ -42,6 +42,6 @@ void Bluetooth::sendMsg(const char* msg){
    Serial.begin(BAUDRATE);
    Serial.println(response);
 
-}
+}*/
 
 Bluetooth BT_INSTANCE = Bluetooth();
