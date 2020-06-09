@@ -19,32 +19,23 @@ class Sensor{
     //Enable to change the port we are currently communicating to on the multiplexer so we can distinguish the 
     //sensors currently attached to it 
 
-    void moveToPort(void);
-    //group the sensor belongs to
-    uint8_t group_num;
+    void moveToPort(uint8_t bus);
+  
+
     public:
 
     Sensor(void);
-    //Constructor pass sensor by reference instead of by value to reduce overhead
-    Sensor(uint8_t bus);
-    ~Sensor(void);
+ 
 
     //initializes the sensor with default configurations
-    void begin(void);
+    void begin(uint8_t bus);
 
     //gets the humidity reading from the sensor and returns the value 
-    float getHumidity(void);
+    float getHumidity(uint8_t bus );
     
     //gets the temperature reading from the sensor and returns the value
-    float getTemperature(void);
-
-    //sets the group number of the sensor
-    void setGroup(uint8_t groupNum);
-
-    //returns the group number of the sensor
-    uint8_t getGroup();
-    
-
-    int getBus();
+    float getTemperature(uint8_t bus);
 
 };
+
+

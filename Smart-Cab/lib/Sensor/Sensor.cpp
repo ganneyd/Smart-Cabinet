@@ -1,33 +1,29 @@
 #include "Sensor.h"
 
 
-Sensor::Sensor(uint8_t bus):sensorPtr(SENOR_ADDR){
+Sensor::Sensor(void):sensorPtr(SENOR_ADDR){
     
     this->sensorPtr= HDC2080(SENOR_ADDR);
-    
-    this->bus = bus;
 
 }
-Sensor::~Sensor(void){
-   
-}
 
-void Sensor::moveToPort(void){
+
+void Sensor::moveToPort(uint8_t bus){
     
      //begin the transmission to the multiplexer
         Wire.beginTransmission(MULTIPLEXER_ADDR);
         //write the bus/port to be used 
-        Wire.write(1<<this->bus);
+        Wire.write(1<<bus);
         //close off the transmission
         Wire.endTransmission();
         
 }
 
-void Sensor::begin(void){
+void Sensor::begin(uint8_t bus){
     
     
     //Move to the port the sensor is connected to on the multiplexer
-    moveToPort();
+    moveToPort(bus);
     // Initialize I2C communication
 
     this->sensorPtr.begin();
@@ -50,31 +46,18 @@ void Sensor::begin(void){
   this->sensorPtr.triggerMeasurement();
 }
 
-float Sensor::getHumidity(void){
+float Sensor::getHumidity(uint8_t bus){
     
     //move to the port the sensor is on to get reliable reading
-    moveToPort();
+    moveToPort(bus);
     //return the reading
     return this->sensorPtr.readHumidity();
 }
 
-float Sensor::getTemperature(void){
+float Sensor::getTemperature(uint8_t bus){
     
     //move to the port the sensor is on to get reliable reading
-    moveToPort();
+    moveToPort(bus);
     //return the reading
     return this->sensorPtr.readTemp();
-}
-
-
-int Sensor::getBus(){
-    return this->bus;
-}
-
-void  Sensor::setGroup(uint8_t groupNum){
-    this->group_num = groupNum;
-}
-
-uint8_t Sensor::getGroup(){
-    return this->group_num;
 }

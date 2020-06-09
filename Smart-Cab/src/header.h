@@ -2,6 +2,5 @@
 #include "../Commands/Command.h"
 #include "../Commands/Commands.h"
 #include "../Bluetooth/Bluetooth.h"
-#include "../Sensor/Sensors.h"
 #include "../lib/Macros/Define.h"
 #include "../Config/Config.h"
